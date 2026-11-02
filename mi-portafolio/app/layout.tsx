@@ -13,8 +13,21 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="es" suppressHydrationWarning>
-      <body>{children}</body>
+    <html
+      lang="es"
+      data-theme="light"
+      className="scroll-smooth"
+      style={{ colorScheme: "light" }}
+      suppressHydrationWarning
+    >
+      <head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `document.documentElement.setAttribute('data-theme', 'light'); document.documentElement.classList.remove('dark');`,
+          }}
+        />
+      </head>
+      <body className="bg-[#f6f7f9] text-[#0f172a]">{children}</body>
     </html>
   );
 }
