@@ -18,11 +18,11 @@ type NavbarProps = {
 const navItems = [
   { id: "hero", es: "Inicio", en: "Home" },
   { id: "sobre-mi", es: "Sobre mí", en: "About" },
+  { id: "habilidades", es: "Habilidades", en: "Skills" },
   { id: "proyectos", es: "Proyectos", en: "Projects" },
   { id: "testimonios", es: "Testimonios", en: "Testimonials" },
   { id: "experiencia", es: "Experiencia", en: "Experience" },
   { id: "contacto", es: "Contacto", en: "Contact" },
-  { id: "habilidades", es: "Habilidades", en: "Skills" },
 ] as const;
 
 function SunIcon() {
