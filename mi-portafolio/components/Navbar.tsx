@@ -23,6 +23,7 @@ const navItems = [
   { id: "testimonios", es: "Testimonios", en: "Testimonials" },
   { id: "experiencia", es: "Experiencia", en: "Experience" },
   { id: "contacto", es: "Contacto", en: "Contact" },
+  { id: "certificados", es: "Certificados", en: "Certificates" },
 ] as const;
 
 function SunIcon() {
@@ -91,24 +92,24 @@ export default function Navbar({
         aria-label="Navegación principal"
         className="
           relative
-          flex min-h-[68px] items-center justify-between
-          gap-3
+          flex min-h-[66px] items-center justify-between
+          gap-2.5
           rounded-full
           border border-white/60
           bg-white/80
-          px-5 py-2
+          px-4 py-2
           text-slate-800
           shadow-[0_10px_32px_rgba(15,23,42,0.10)]
           backdrop-blur-xl
           backdrop-saturate-150
           transition-all duration-300
 
-          sm:px-7
+          sm:px-6
           md:grid
           md:grid-cols-[auto_1fr_auto]
-          md:gap-4
-          md:px-8
-          lg:px-10
+          md:gap-3
+          md:px-7
+          lg:px-9
 
           dark:border-white/10
           dark:bg-neutral-900/80
@@ -127,7 +128,7 @@ export default function Navbar({
           className="
             justify-self-start
             shrink-0 whitespace-nowrap
-            text-[1rem] font-bold tracking-tight
+            text-[0.98rem] font-bold tracking-tight
             text-slate-950
             transition-colors duration-200
             hover:text-indigo-600
@@ -144,8 +145,8 @@ export default function Navbar({
           className="
             hidden md:flex
             items-center justify-center
-            gap-2.5
-            lg:gap-5
+            gap-1.5
+            lg:gap-3.5
           "
         >
           {navItems.map((item) => {
@@ -163,8 +164,8 @@ export default function Navbar({
                 className={`
                   group relative
                   whitespace-nowrap
-                  px-0.5 py-2
-                  text-[0.84rem] lg:text-[0.91rem] font-medium
+                  px-0.5 py-1.5
+                  text-[0.80rem] lg:text-[0.88rem] font-medium
                   transition-colors duration-200
                   ${
                     active
@@ -195,7 +196,7 @@ export default function Navbar({
         {/* DERECHA */}
         <div
           className="
-            ml-auto flex shrink-0 items-center gap-2
+            ml-auto flex shrink-0 items-center gap-1.5
             md:ml-0 md:justify-self-end
           "
         >
@@ -204,11 +205,11 @@ export default function Navbar({
             onClick={onToggleLanguage}
             aria-label={lang === "es" ? "Cambiar a inglés" : "Cambiar a español"}
             className="
-              flex h-10 min-w-[48px] items-center justify-center
+              flex h-9 min-w-[44px] items-center justify-center
               rounded-xl
               border border-slate-200/80
               bg-white/20
-              px-2.5
+              px-2
               text-xs font-semibold tracking-wide text-slate-600
               backdrop-blur-md
               transition-all duration-200
@@ -231,7 +232,7 @@ export default function Navbar({
               theme === "dark" ? "Activar modo claro" : "Activar modo oscuro"
             }
             className="
-              flex h-10 w-10 items-center justify-center
+              flex h-9 w-9 items-center justify-center
               rounded-xl
               border border-slate-200/80
               bg-white/20
@@ -256,11 +257,11 @@ export default function Navbar({
             aria-label={navOpen ? "Cerrar menú" : "Abrir menú"}
             aria-expanded={navOpen}
             className="
-              flex h-10 w-10 items-center justify-center
+              flex h-9 w-9 items-center justify-center
               rounded-xl
               border border-slate-200/80
               bg-white/20
-              text-xl leading-none text-slate-600
+              text-lg leading-none text-slate-600
               backdrop-blur-md
               transition-all duration-200
               hover:border-indigo-400 hover:text-indigo-600
@@ -314,7 +315,7 @@ export default function Navbar({
                     onCloseMenu();
                   }}
                   className={`
-                    rounded-2xl px-4 py-3
+                    rounded-2xl px-4 py-2.5
                     text-sm font-medium
                     transition-colors duration-200
                     ${
