@@ -38,6 +38,7 @@ const translations: Record<Language, Record<string, string>> = {
     nav_testi: "Testimonios",
     nav_exp: "Experiencia",
     nav_contact: "Contacto",
+    nav_certs: "Certificados",
     hero_eyebrow: "¡Hola!",
     hero_name: "Yo soy David",
     hero_role: "Software Developer",
@@ -125,6 +126,31 @@ const translations: Record<Language, Record<string, string>> = {
     f_email: "Tu email",
     f_msg: "Cuéntame sobre tu proyecto o vacante",
     f_submit: "Enviar mensaje",
+    title_certs: "Certificaciones y Logros",
+    certs_desc:
+      "Acreditaciones técnicas emitidas por organizaciones líderes e instituciones académicas que respaldan mis conocimientos en desarrollo de software, inteligencia artificial, SQL y control de versiones.",
+    btn_view_cert: "Ver certificado",
+    btn_verify: "Verificar en línea",
+    cert_1_entity: "IBM & Coursera",
+    cert_1_title: "Python for Data Science, AI & Development",
+    cert_1_desc:
+      "Certificación profesional en programación con Python para ciencia de datos, lógica de desarrollo y fundamentos aplicados de Inteligencia Artificial.",
+    cert_1_date: "Octubre 2026",
+    cert_2_entity: "DataCamp",
+    cert_2_title: "Introduction to SQL",
+    cert_2_desc:
+      "Dominio en consultas SQL relacionales, agregación y filtrado de datos, agrupamientos y gestión de bases de datos relacionales.",
+    cert_2_date: "Agosto 2026",
+    cert_3_entity: "DataCamp",
+    cert_3_title: "Introduction to Git",
+    cert_3_desc:
+      "Control de versiones distribuido, ramificaciones, resolución de conflictos y flujo de trabajo colaborativo profesional con Git y GitHub.",
+    cert_3_date: "Agosto 2026",
+    cert_4_entity: "Universidad Mariana",
+    cert_4_title: "Desarrollo de Aplicaciones Móviles desde Cero",
+    cert_4_desc:
+      "Curso intensivo de 32 horas académicas avalado por el Programa de Ingeniería de Sistemas enfocado en fundamentos de desarrollo móvil y arquitectura de software.",
+    cert_4_date: "Junio 2021",
     footer_rights: "David Cabrera. Todos los derechos reservados.",
     toast_demo:
       "Mensaje enviado (demo). Configura tu URL de Formspree para recibir mensajes reales.",
@@ -137,6 +163,7 @@ const translations: Record<Language, Record<string, string>> = {
     nav_testi: "Testimonials",
     nav_exp: "Experience",
     nav_contact: "Contact",
+    nav_certs: "Certificates",
     hero_eyebrow: "Hi!",
     hero_name: "I'm David",
     hero_role: "Software Developer",
@@ -224,6 +251,31 @@ const translations: Record<Language, Record<string, string>> = {
     f_email: "Your email",
     f_msg: "Tell me about your project or vacancy",
     f_submit: "Send message",
+    title_certs: "Certifications & Achievements",
+    certs_desc:
+      "Technical credentials issued by leading organizations and academic institutions backing my skills in software development, AI, SQL, and version control.",
+    btn_view_cert: "View certificate",
+    btn_verify: "Verify online",
+    cert_1_entity: "IBM & Coursera",
+    cert_1_title: "Python for Data Science, AI & Development",
+    cert_1_desc:
+      "Professional certification in Python programming for data science, computational logic, and applied Artificial Intelligence fundamentals.",
+    cert_1_date: "October 2026",
+    cert_2_entity: "DataCamp",
+    cert_2_title: "Introduction to SQL",
+    cert_2_desc:
+      "Proficiency in relational SQL queries, data aggregation, filtering, groupings, and relational database schema design.",
+    cert_2_date: "August 2026",
+    cert_3_entity: "DataCamp",
+    cert_3_title: "Introduction to Git",
+    cert_3_desc:
+      "Distributed version control, branching models, conflict resolution, and collaborative workflows with Git and GitHub.",
+    cert_3_date: "August 2026",
+    cert_4_entity: "Universidad Mariana",
+    cert_4_title: "Mobile App Development from Scratch",
+    cert_4_desc:
+      "Intensive 32-hour academic program endorsed by the Systems Engineering Faculty focusing on software architecture and mobile development fundamentals.",
+    cert_4_date: "June 2021",
     footer_rights: "David Cabrera. All rights reserved.",
     toast_demo:
       "Message sent (demo). Set the form endpoint to receive real messages.",
@@ -362,6 +414,46 @@ const projects = [
   },
 ];
 
+const certificates = [
+  {
+    id: "ibm-python-ai",
+    entityKey: "cert_1_entity",
+    titleKey: "cert_1_title",
+    descKey: "cert_1_desc",
+    dateKey: "cert_1_date",
+    file: "/certificados/ibm-python-ai.pdf",
+    verifyUrl: "https://coursera.org/verify/G65MXUAPF6FX",
+    badge: "IBM · Coursera",
+  },
+  {
+    id: "datacamp-sql",
+    entityKey: "cert_2_entity",
+    titleKey: "cert_2_title",
+    descKey: "cert_2_desc",
+    dateKey: "cert_2_date",
+    file: "/certificados/datacamp-sql.pdf",
+    badge: "DataCamp",
+  },
+  {
+    id: "datacamp-git",
+    entityKey: "cert_3_entity",
+    titleKey: "cert_3_title",
+    descKey: "cert_3_desc",
+    dateKey: "cert_3_date",
+    file: "/certificados/datacamp-git.pdf",
+    badge: "DataCamp",
+  },
+  {
+    id: "universidad-mariana-movil",
+    entityKey: "cert_4_entity",
+    titleKey: "cert_4_title",
+    descKey: "cert_4_desc",
+    dateKey: "cert_4_date",
+    file: "/certificados/universidad-mariana-movil.pdf",
+    badge: "Universidad Mariana",
+  },
+];
+
 const navItems = [
   { id: "hero", key: "nav_home" },
   { id: "sobre-mi", key: "nav_about" },
@@ -370,6 +462,7 @@ const navItems = [
   { id: "testimonios", key: "nav_testi" },
   { id: "experiencia", key: "nav_exp" },
   { id: "contacto", key: "nav_contact" },
+  { id: "certificados", key: "nav_certs" },
 ];
 
 export default function Portfolio() {
@@ -444,12 +537,12 @@ export default function Portfolio() {
         return;
       }
 
-      // Si llegó al final de la página, activa Contacto
+      // Si llegó al final de la página, activa la última sección
       if (
         window.innerHeight + scrollY >=
         document.documentElement.scrollHeight - 60
       ) {
-        setActiveSection("contacto");
+        setActiveSection(navItems[navItems.length - 1].id);
         return;
       }
 
@@ -588,7 +681,7 @@ export default function Portfolio() {
 
       gsap.utils
         .toArray<HTMLElement>(
-          ".section-title, .carousel, .projects-grid, .testimonials-grid, .experience-wrap, .contact-grid",
+          ".section-title, .carousel, .projects-grid, .testimonials-grid, .experience-wrap, .contact-grid, .certificates-grid",
         )
         .forEach((element) => {
           gsap.from(element, {
@@ -632,8 +725,6 @@ export default function Portfolio() {
     setActiveSection(id);
     setNavOpen(false);
 
-    // Con el padding-top de 7rem en .section, alinear la sección al top (0)
-    // posiciona el contenido perfectamente debajo de la barra sin mostrar la sección anterior.
     const targetTop =
       id === "hero"
         ? 0
@@ -1161,9 +1252,63 @@ export default function Portfolio() {
             </div>
           </div>
         </section>
+
+        {/* 9. ⭐ Certificaciones y Logros (Sección adicional, ubicada antes del pie de página) */}
+        <section id="certificados" className="section">
+          <div className="container">
+            <h2 className="section-title">{t("title_certs")}</h2>
+            <p className="about-text max-w-3xl">{t("certs_desc")}</p>
+
+            <div className="certificates-grid">
+              {certificates.map((cert) => (
+                <article key={cert.id} className="certificate-card">
+                  <div>
+                    <div className="certificate-header">
+                      <span className="certificate-badge">
+                        <svg viewBox="0 0 24 24" width={14} height={14} fill="currentColor" aria-hidden="true">
+                          <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm-2 16l-4-4 1.41-1.41L10 14.17l6.59-6.59L18 9l-8 8z" />
+                        </svg>
+                        {cert.badge}
+                      </span>
+                      <span className="text-xs font-semibold text-slate-400 dark:text-neutral-500">
+                        {t(cert.dateKey)}
+                      </span>
+                    </div>
+
+                    <p className="certificate-entity">{t(cert.entityKey)}</p>
+                    <h3 className="certificate-title">{t(cert.titleKey)}</h3>
+                    <p className="certificate-desc">{t(cert.descKey)}</p>
+                  </div>
+
+                  <div className="certificate-actions">
+                    <a
+                      href={cert.file}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="btn btn-small btn-primary"
+                    >
+                      {t("btn_view_cert")} ↗
+                    </a>
+
+                    {cert.verifyUrl && (
+                      <a
+                        href={cert.verifyUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="btn btn-small btn-secondary"
+                      >
+                        {t("btn_verify")}
+                      </a>
+                    )}
+                  </div>
+                </article>
+              ))}
+            </div>
+          </div>
+        </section>
       </main>
 
-      {/* 9. Pie de página */}
+      {/* 10. Pie de página */}
       <footer className="footer">
         <div className="container">
           <div className="footer-made">
