@@ -18,9 +18,11 @@ type NavbarProps = {
 const navItems = [
   { id: "hero", es: "Inicio", en: "Home" },
   { id: "sobre-mi", es: "Sobre mí", en: "About" },
-  { id: "habilidades", es: "Habilidades", en: "Skills" },
   { id: "proyectos", es: "Proyectos", en: "Projects" },
+  { id: "testimonios", es: "Testimonios", en: "Testimonials" },
+  { id: "experiencia", es: "Experiencia", en: "Experience" },
   { id: "contacto", es: "Contacto", en: "Contact" },
+  { id: "habilidades", es: "Habilidades", en: "Skills" },
 ] as const;
 
 function SunIcon() {
@@ -94,18 +96,19 @@ export default function Navbar({
           rounded-full
           border border-white/60
           bg-white/80
-          px-6 py-2
+          px-5 py-2
           text-slate-800
           shadow-[0_10px_32px_rgba(15,23,42,0.10)]
           backdrop-blur-xl
           backdrop-saturate-150
           transition-all duration-300
 
-          sm:px-8
+          sm:px-7
           md:grid
-          md:grid-cols-[1fr_auto_1fr]
-          md:px-10
-          lg:px-12
+          md:grid-cols-[auto_1fr_auto]
+          md:gap-4
+          md:px-8
+          lg:px-10
 
           dark:border-white/10
           dark:bg-neutral-900/80
@@ -124,7 +127,7 @@ export default function Navbar({
           className="
             justify-self-start
             shrink-0 whitespace-nowrap
-            text-[1.05rem] font-bold tracking-tight
+            text-[1rem] font-bold tracking-tight
             text-slate-950
             transition-colors duration-200
             hover:text-indigo-600
@@ -133,7 +136,7 @@ export default function Navbar({
             dark:hover:text-indigo-400
           "
         >
-          Mi Portafolio
+          David Cabrera
         </a>
 
         {/* CENTRO */}
@@ -141,8 +144,8 @@ export default function Navbar({
           className="
             hidden md:flex
             items-center justify-center
-            gap-6
-            lg:gap-7
+            gap-2.5
+            lg:gap-5
           "
         >
           {navItems.map((item) => {
@@ -161,11 +164,11 @@ export default function Navbar({
                   group relative
                   whitespace-nowrap
                   px-0.5 py-2
-                  text-[0.95rem] font-medium
+                  text-[0.84rem] lg:text-[0.91rem] font-medium
                   transition-colors duration-200
                   ${
                     active
-                      ? "text-slate-950 dark:text-white"
+                      ? "text-slate-950 dark:text-white font-semibold"
                       : "text-slate-500 hover:text-slate-950 dark:text-neutral-400 dark:hover:text-white"
                   }
                 `}
@@ -201,12 +204,12 @@ export default function Navbar({
             onClick={onToggleLanguage}
             aria-label={lang === "es" ? "Cambiar a inglés" : "Cambiar a español"}
             className="
-              flex h-11 min-w-[52px] items-center justify-center
+              flex h-10 min-w-[48px] items-center justify-center
               rounded-xl
               border border-slate-200/80
               bg-white/20
-              px-3
-              text-sm font-semibold tracking-wide text-slate-600
+              px-2.5
+              text-xs font-semibold tracking-wide text-slate-600
               backdrop-blur-md
               transition-all duration-200
               hover:border-indigo-400 hover:text-indigo-600
@@ -228,7 +231,7 @@ export default function Navbar({
               theme === "dark" ? "Activar modo claro" : "Activar modo oscuro"
             }
             className="
-              flex h-11 w-11 items-center justify-center
+              flex h-10 w-10 items-center justify-center
               rounded-xl
               border border-slate-200/80
               bg-white/20
@@ -253,7 +256,7 @@ export default function Navbar({
             aria-label={navOpen ? "Cerrar menú" : "Abrir menú"}
             aria-expanded={navOpen}
             className="
-              flex h-11 w-11 items-center justify-center
+              flex h-10 w-10 items-center justify-center
               rounded-xl
               border border-slate-200/80
               bg-white/20
@@ -316,7 +319,7 @@ export default function Navbar({
                     transition-colors duration-200
                     ${
                       active
-                        ? "bg-indigo-500/10 text-indigo-600 dark:text-indigo-300"
+                        ? "bg-indigo-500/10 text-indigo-600 dark:text-indigo-300 font-semibold"
                         : "text-slate-600 hover:bg-slate-100 dark:text-neutral-300 dark:hover:bg-white/5"
                     }
                   `}
