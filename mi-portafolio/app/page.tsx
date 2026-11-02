@@ -33,11 +33,11 @@ const translations: Record<Language, Record<string, string>> = {
   es: {
     nav_home: "Inicio",
     nav_about: "Sobre mí",
+    nav_skills: "Habilidades",
     nav_projects: "Proyectos",
     nav_testi: "Testimonios",
     nav_exp: "Experiencia",
     nav_contact: "Contacto",
-    nav_skills: "Habilidades",
     hero_eyebrow: "¡Hola!",
     hero_name: "Yo soy David",
     hero_role: "Software Developer",
@@ -132,11 +132,11 @@ const translations: Record<Language, Record<string, string>> = {
   en: {
     nav_home: "Home",
     nav_about: "About",
+    nav_skills: "Skills",
     nav_projects: "Projects",
     nav_testi: "Testimonials",
     nav_exp: "Experience",
     nav_contact: "Contact",
-    nav_skills: "Skills",
     hero_eyebrow: "Hi!",
     hero_name: "I'm David",
     hero_role: "Software Developer",
@@ -365,11 +365,11 @@ const projects = [
 const navItems = [
   { id: "hero", key: "nav_home" },
   { id: "sobre-mi", key: "nav_about" },
+  { id: "habilidades", key: "nav_skills" },
   { id: "proyectos", key: "nav_projects" },
   { id: "testimonios", key: "nav_testi" },
   { id: "experiencia", key: "nav_exp" },
   { id: "contacto", key: "nav_contact" },
-  { id: "habilidades", key: "nav_skills" },
 ];
 
 export default function Portfolio() {
@@ -444,8 +444,17 @@ export default function Portfolio() {
         return;
       }
 
-      const activationLine =
-        scrollY + Math.min(window.innerHeight * 0.3, 220);
+      // Si llegó al final de la página, activa Contacto
+      if (
+        window.innerHeight + scrollY >=
+        document.documentElement.scrollHeight - 60
+      ) {
+        setActiveSection("contacto");
+        return;
+      }
+
+      // Umbral debajo del navbar flotante
+      const activationLine = scrollY + 140;
 
       let currentSection = "hero";
 
@@ -623,23 +632,26 @@ export default function Portfolio() {
     setActiveSection(id);
     setNavOpen(false);
 
-    const navbarOffset = 118;
+    // Con el padding-top de 7rem en .section, alinear la sección al top (0)
+    // posiciona el contenido perfectamente debajo de la barra sin mostrar la sección anterior.
     const targetTop =
-      target.getBoundingClientRect().top + window.scrollY - navbarOffset;
+      id === "hero"
+        ? 0
+        : target.getBoundingClientRect().top + window.scrollY;
 
     if (window.location.hash !== `#${id}`) {
       window.history.pushState(null, "", `#${id}`);
     }
 
     window.scrollTo({
-      top: Math.max(0, targetTop),
+      top: Math.max(0, Math.round(targetTop)),
       behavior: "smooth",
     });
 
     navigationTimerRef.current = setTimeout(() => {
       navigationTargetRef.current = null;
       setActiveSection(id);
-    }, 1200);
+    }, 900);
   };
 
   const handleFormSubmit = (event: FormEvent<HTMLFormElement>) => {
@@ -847,8 +859,65 @@ export default function Portfolio() {
           </div>
         </section>
 
-        {/* 4. Mis proyectos */}
-        <section id="proyectos" className="section section-alt">
+        {/* 4. Habilidades (Ubicada justo después de Sobre mí) */}
+        <section id="habilidades" className="section section-alt">
+          <div className="container">
+            <h2 className="section-title">{t("title_skills")}</h2>
+            <p className="about-text">{t("skills_desc")}</p>
+
+            <div className="carousel">
+              <div className="carousel-track">
+                {skills.map((skill, index) => (
+                  <article
+                    key={skill.name}
+                    className={`skill-card ${activeIndex === index ? "active" : ""}`}
+                    style={getCardStyle(index)}
+                    onMouseEnter={() => setActiveIndex(index)}
+                    onFocus={() => setActiveIndex(index)}
+                    onClick={() => setActiveIndex(index)}
+                    tabIndex={0}
+                  >
+                    <div className="skill-icon">
+                      <SkillIcon name={skill.name} />
+                    </div>
+                    <h3 className="skill-name">{skill.name}</h3>
+                    <p className="skill-level">{t(`skill_${index}`)}</p>
+                  </article>
+                ))}
+              </div>
+
+              <div className="carousel-controls">
+                <div className="carousel-nav">
+                  <button
+                    type="button"
+                    className="carousel-btn carousel-prev"
+                    onClick={previousSkill}
+                    aria-label="Anterior"
+                  >
+                    ‹
+                  </button>
+                  <button
+                    type="button"
+                    className="carousel-btn carousel-next"
+                    onClick={nextSkill}
+                    aria-label="Siguiente"
+                  >
+                    ›
+                  </button>
+                </div>
+
+                <div className="carousel-counter" aria-live="polite">
+                  <span>{activeIndex + 1}</span>
+                  <span>/</span>
+                  <span>{skills.length}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* 5. Mis proyectos */}
+        <section id="proyectos" className="section">
           <div className="container">
             <h2 className="section-title">{t("title_projects")}</h2>
             <p className="projects-description">{t("projects_desc")}</p>
@@ -917,8 +986,8 @@ export default function Portfolio() {
           </div>
         </section>
 
-        {/* 5. Testimonios */}
-        <section id="testimonios" className="section">
+        {/* 6. Testimonios */}
+        <section id="testimonios" className="section section-alt">
           <div className="container">
             <h2 className="section-title">{t("title_testi")}</h2>
             <p className="about-text text-center max-w-2xl mx-auto mb-10">{t("testi_desc")}</p>
@@ -960,8 +1029,8 @@ export default function Portfolio() {
           </div>
         </section>
 
-        {/* 6. Experiencia académica y laboral */}
-        <section id="experiencia" className="section section-alt">
+        {/* 7. Experiencia académica y laboral */}
+        <section id="experiencia" className="section">
           <div className="container">
             <h2 className="section-title">{t("title_exp")}</h2>
             <p className="about-text text-center max-w-3xl mx-auto mb-12">{t("exp_desc")}</p>
@@ -1026,8 +1095,8 @@ export default function Portfolio() {
           </div>
         </section>
 
-        {/* 7. Contactos */}
-        <section id="contacto" className="section">
+        {/* 8. Contactos */}
+        <section id="contacto" className="section section-alt">
           <div className="container">
             <h2 className="section-title">{t("title_contact")}</h2>
 
@@ -1092,66 +1161,9 @@ export default function Portfolio() {
             </div>
           </div>
         </section>
-
-        {/* ⭐ Sección adicional (Habilidades, ubicada antes del pie de página) */}
-        <section id="habilidades" className="section section-alt">
-          <div className="container">
-            <h2 className="section-title">{t("title_skills")}</h2>
-            <p className="about-text">{t("skills_desc")}</p>
-
-            <div className="carousel">
-              <div className="carousel-track">
-                {skills.map((skill, index) => (
-                  <article
-                    key={skill.name}
-                    className={`skill-card ${activeIndex === index ? "active" : ""}`}
-                    style={getCardStyle(index)}
-                    onMouseEnter={() => setActiveIndex(index)}
-                    onFocus={() => setActiveIndex(index)}
-                    onClick={() => setActiveIndex(index)}
-                    tabIndex={0}
-                  >
-                    <div className="skill-icon">
-                      <SkillIcon name={skill.name} />
-                    </div>
-                    <h3 className="skill-name">{skill.name}</h3>
-                    <p className="skill-level">{t(`skill_${index}`)}</p>
-                  </article>
-                ))}
-              </div>
-
-              <div className="carousel-controls">
-                <div className="carousel-nav">
-                  <button
-                    type="button"
-                    className="carousel-btn carousel-prev"
-                    onClick={previousSkill}
-                    aria-label="Anterior"
-                  >
-                    ‹
-                  </button>
-                  <button
-                    type="button"
-                    className="carousel-btn carousel-next"
-                    onClick={nextSkill}
-                    aria-label="Siguiente"
-                  >
-                    ›
-                  </button>
-                </div>
-
-                <div className="carousel-counter" aria-live="polite">
-                  <span>{activeIndex + 1}</span>
-                  <span>/</span>
-                  <span>{skills.length}</span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
       </main>
 
-      {/* 8. Pie de página */}
+      {/* 9. Pie de página */}
       <footer className="footer">
         <div className="container">
           <div className="footer-made">
