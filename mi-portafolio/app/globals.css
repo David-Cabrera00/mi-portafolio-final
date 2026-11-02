@@ -2,6 +2,7 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 :root {
+  color-scheme: light;
   --glass-bg: rgba(255, 255, 255, 0.58);
 
   --glass-border: rgba(255, 255, 255, 0.32);
@@ -43,6 +44,7 @@
 }
 
 [data-theme="dark"] {
+  color-scheme: dark;
   --bg: #0f1117;
   --bg-alt: #161a23;
   --surface: #161a23;
@@ -79,6 +81,8 @@ html {
   scroll-padding-top: 6.5rem;
   overflow-x: hidden;
   max-width: 100%;
+  background: var(--bg);
+  color-scheme: light;
 }
 
 body {
@@ -86,7 +90,6 @@ body {
   background: var(--bg);
   color: var(--text);
   line-height: 1.6;
-  transition: background 0.3s, color 0.3s;
   overflow-x: hidden;
   width: 100%;
 }
