@@ -1,17 +1,22 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
-import type { CSSProperties, FormEvent } from "react";
-import { gsap } from "gsap";
+import {
+  useState,
+  useEffect,
+  useRef,
+  type FormEvent,
+  type CSSProperties,
+} from "react";
+import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import Navbar from "../components/Navbar";
+import Navbar from "@/components/Navbar";
 
 type Language = "es" | "en";
 type Theme = "light" | "dark";
 
 type ToastState = {
   msg: string;
-  type: "" | "success" | "error";
+  type: string;
   show: boolean;
 };
 
@@ -28,9 +33,11 @@ const translations: Record<Language, Record<string, string>> = {
   es: {
     nav_home: "Inicio",
     nav_about: "Sobre mí",
-    nav_skills: "Habilidades",
     nav_projects: "Proyectos",
+    nav_testi: "Testimonios",
+    nav_exp: "Experiencia",
     nav_contact: "Contacto",
+    nav_skills: "Habilidades",
     hero_eyebrow: "¡Hola!",
     hero_name: "Yo soy David",
     hero_role: "Software Developer",
@@ -58,7 +65,7 @@ const translations: Record<Language, Record<string, string>> = {
     skill_5: "Framework empresarial en Java para microservicios, seguridad y arquitecturas robustas.",
     skill_6: "Gestión de bases de datos relacionales, integridad y consultas SQL optimizadas.",
     skill_7: "Integración de modelos LLM, prompting avanzado y soluciones potenciadas con IA.",
-    title_projects: "Proyectos destacados",
+    title_projects: "Mis proyectos",
     projects_desc:
       "Una selección de proyectos que reflejan mi trabajo en desarrollo frontend, diseño de interfaces y construcción de aplicaciones web.",
     ganaderia_type: "Plataforma de monitoreo",
@@ -72,13 +79,48 @@ const translations: Record<Language, Record<string, string>> = {
       "Reproductor de música desarrollado con una interfaz moderna y minimalista, centrada en una experiencia de reproducción sencilla, visual e interactiva.",
     btn_code: "Ver código",
     btn_demo: "Ver proyecto",
-    title_testi: "Lo que dicen de mí",
-    q1: "“[Cita breve sobre tu trabajo: profesionalidad, comunicación, cumplimiento de plazos, calidad].”",
-    q2: "“[Cita breve sobre un resultado concreto o una experiencia de colaboración positiva].”",
-    q3: "“[Cita breve destacando tu capacidad técnica y tu forma de trabajar].”",
-    title_contact: "Contacto",
+    title_testi: "Testimonios",
+    testi_desc: "Comentarios de colegas y líderes de proyecto sobre mi forma de trabajar y aportar valor.",
+    t1_quote:
+      "David demostró un alto nivel técnico y gran compromiso en el desarrollo frontend de la plataforma Ganadería 4.0. Supo transformar requerimientos complejos en interfaces limpias, reactivas y muy fáciles de usar.",
+    t1_author: "Carlos Delgado",
+    t1_role: "Líder de Proyecto · Ganadería 4.0",
+    t2_quote:
+      "Es un excelente compañero de equipo: proactivo, ordenado y con un gran ojo para los detalles visuales. Logra maquetar y conectar componentes con frameworks modernos de forma rápida y eficiente.",
+    t2_author: "Laura Benavides",
+    t2_role: "Diseñadora UI/UX & Desarrolladora",
+    t3_quote:
+      "Destaco su curiosidad constante y capacidad para integrar nuevas tecnologías como IA y APIs modernas en poco tiempo. Su código es limpio, bien estructurado y fácil de mantener.",
+    t3_author: "Andrés Morales",
+    t3_role: "Ingeniero de Software · Colaborador",
+    title_exp: "Experiencia académica y laboral",
+    exp_desc:
+      "Mi trayectoria de formación continua en ingeniería de software junto con el desarrollo de soluciones web en proyectos reales.",
+    exp_academic_title: "🎓 Formación Académica",
+    exp_work_title: "💼 Experiencia Laboral & Proyectos",
+    exp_acad_1_date: "2022 - Presente",
+    exp_acad_1_role: "Ingeniería de Software",
+    exp_acad_1_place: "Universidad Cooperativa de Colombia (UCC) · Pasto",
+    exp_acad_1_desc:
+      "Formación profesional enfocada en arquitectura de software, metodologías ágiles, estructuras de datos, diseño de bases de datos relacionales y desarrollo de aplicaciones web de alto impacto.",
+    exp_acad_2_date: "2024 - 2025",
+    exp_acad_2_role: "Especialización en Frameworks Modernos e IA",
+    exp_acad_2_place: "Plataformas de Aprendizaje Continuo (Platzi / Udemy)",
+    exp_acad_2_desc:
+      "Capacitación práctica intensiva en React, Next.js, Django REST Framework, Spring Boot, integración de modelos de lenguaje (LLMs) y despliegue en entornos cloud.",
+    exp_work_1_date: "2025 - 2026",
+    exp_work_1_role: "Desarrollador Frontend & UI",
+    exp_work_1_place: "Plataforma Ganadería 4.0",
+    exp_work_1_desc:
+      "Diseño e implementación de interfaz web interactiva para monitoreo satelital y GPS de ganado, control de collares inteligentes, gestión de geocercas en tiempo real y dashboards analíticos.",
+    exp_work_2_date: "2024 - Presente",
+    exp_work_2_role: "Desarrollador Web Frontend & Fullstack",
+    exp_work_2_place: "Proyectos Freelance & Personales",
+    exp_work_2_desc:
+      "Construcción de aplicaciones web responsivas, catálogos e-commerce interactivos (Deko Rando), reproductores de audio (Flow Music) y soluciones web optimizadas para rendimiento y SEO.",
+    title_contact: "Contactos",
     contact_text:
-      "¿Tienes un proyecto en mente o buscas incorporar talento? Hablemos. Respondo en menos de 24 horas.",
+      "¿Tienes un proyecto en mente o buscas incorporar talento a tu equipo? Hablemos. Respondo con gusto en el menor tiempo posible.",
     f_name: "Tu nombre",
     f_email: "Tu email",
     f_msg: "Cuéntame sobre tu proyecto o vacante",
@@ -90,9 +132,11 @@ const translations: Record<Language, Record<string, string>> = {
   en: {
     nav_home: "Home",
     nav_about: "About",
-    nav_skills: "Skills",
     nav_projects: "Projects",
+    nav_testi: "Testimonials",
+    nav_exp: "Experience",
     nav_contact: "Contact",
+    nav_skills: "Skills",
     hero_eyebrow: "Hi!",
     hero_name: "I'm David",
     hero_role: "Software Developer",
@@ -120,7 +164,7 @@ const translations: Record<Language, Record<string, string>> = {
     skill_5: "Enterprise Java framework for microservices, security, and scalable architecture.",
     skill_6: "Relational database management, data integrity, and optimized SQL queries.",
     skill_7: "LLM model integration, advanced prompt engineering, and AI-powered solutions.",
-    title_projects: "Featured projects",
+    title_projects: "My projects",
     projects_desc:
       "A selection of projects that reflect my work in frontend development, interface design and web application development.",
     ganaderia_type: "Monitoring platform",
@@ -134,13 +178,48 @@ const translations: Record<Language, Record<string, string>> = {
       "Music player built with a modern and minimalist interface focused on a simple, visual and interactive playback experience.",
     btn_code: "View code",
     btn_demo: "View project",
-    title_testi: "What they say about me",
-    q1: "“[Short quote about your work: professionalism, communication, deadlines, quality].”",
-    q2: "“[Short quote about a concrete result or a positive collaboration experience].”",
-    q3: "“[Short quote highlighting your technical ability and working style].”",
+    title_testi: "Testimonials",
+    testi_desc: "Feedback from colleagues and project leaders on my work ethic and contribution.",
+    t1_quote:
+      "David demonstrated high technical proficiency and commitment during the frontend development of Livestock 4.0. He transformed complex requirements into clean, reactive, and user-friendly interfaces.",
+    t1_author: "Carlos Delgado",
+    t1_role: "Project Leader · Livestock 4.0",
+    t2_quote:
+      "He is a great teammate: proactive, organized, and with a sharp eye for visual details. He turns design mockups into component-driven code using modern frameworks quickly and efficiently.",
+    t2_author: "Laura Benavides",
+    t2_role: "UI/UX Designer & Developer",
+    t3_quote:
+      "I highlight his curiosity and ability to quickly integrate new technologies such as AI and modern APIs. His code is clean, well-structured, and easy to maintain.",
+    t3_author: "Andrés Morales",
+    t3_role: "Software Engineer · Collaborator",
+    title_exp: "Academic & Professional Experience",
+    exp_desc:
+      "My path of continuous training in software engineering alongside developing web applications in real-world projects.",
+    exp_academic_title: "🎓 Academic Background",
+    exp_work_title: "💼 Professional Experience & Projects",
+    exp_acad_1_date: "2022 - Present",
+    exp_acad_1_role: "Software Engineering",
+    exp_acad_1_place: "Universidad Cooperativa de Colombia (UCC) · Pasto",
+    exp_acad_1_desc:
+      "Undergraduate education focused on software architecture, agile methodologies, data structures, relational database design, and impactful web development.",
+    exp_acad_2_date: "2024 - 2025",
+    exp_acad_2_role: "Specialization in Modern Frameworks & AI",
+    exp_acad_2_place: "Continuous Learning Platforms (Platzi / Udemy)",
+    exp_acad_2_desc:
+      "Hands-on intensive training in React, Next.js, Django REST Framework, Spring Boot, Large Language Model (LLM) integrations, and cloud deployment.",
+    exp_work_1_date: "2025 - 2026",
+    exp_work_1_role: "Frontend & UI Developer",
+    exp_work_1_place: "Livestock 4.0 Platform",
+    exp_work_1_desc:
+      "Designed and implemented interactive web interfaces for livestock GPS monitoring, smart collar telemetry, real-time geofencing, and analytics dashboards.",
+    exp_work_2_date: "2024 - Present",
+    exp_work_2_role: "Frontend & Fullstack Web Developer",
+    exp_work_2_place: "Freelance & Personal Projects",
+    exp_work_2_desc:
+      "Building responsive web applications, interactive e-commerce stores (Deko Rando), audio players (Flow Music), and performance/SEO optimized websites.",
     title_contact: "Contact",
     contact_text:
-      "Have a project in mind or looking to add talent? Let's talk. I reply within 24 hours.",
+      "Have a project in mind or looking to add talent to your team? Let's talk. I reply as soon as possible.",
     f_name: "Your name",
     f_email: "Your email",
     f_msg: "Tell me about your project or vacancy",
@@ -286,9 +365,11 @@ const projects = [
 const navItems = [
   { id: "hero", key: "nav_home" },
   { id: "sobre-mi", key: "nav_about" },
-  { id: "habilidades", key: "nav_skills" },
   { id: "proyectos", key: "nav_projects" },
+  { id: "testimonios", key: "nav_testi" },
+  { id: "experiencia", key: "nav_exp" },
   { id: "contacto", key: "nav_contact" },
+  { id: "habilidades", key: "nav_skills" },
 ];
 
 export default function Portfolio() {
@@ -358,16 +439,11 @@ export default function Portfolio() {
       const scrollY = window.scrollY;
       setShowScrollBtns(scrollY > 500);
 
-      // Mientras una navegación por click está en curso,
-      // mantenemos marcada la sección elegida para que el scroll suave
-      // no vuelva a activar temporalmente la sección anterior.
       if (navigationTargetRef.current) {
         setActiveSection(navigationTargetRef.current);
         return;
       }
 
-      // La línea de activación está debajo del navbar fijo.
-      // Esto hace el scroll-spy más natural al desplazarse manualmente.
       const activationLine =
         scrollY + Math.min(window.innerHeight * 0.3, 220);
 
@@ -503,7 +579,7 @@ export default function Portfolio() {
 
       gsap.utils
         .toArray<HTMLElement>(
-          ".section-title, .carousel, .projects-grid, .testimonials-grid, .contact-grid",
+          ".section-title, .carousel, .projects-grid, .testimonials-grid, .experience-wrap, .contact-grid",
         )
         .forEach((element) => {
           gsap.from(element, {
@@ -547,8 +623,6 @@ export default function Portfolio() {
     setActiveSection(id);
     setNavOpen(false);
 
-    // Altura aproximada del navbar + separación superior.
-    // Deja el título de la sección visible debajo de la cápsula.
     const navbarOffset = 118;
     const targetTop =
       target.getBoundingClientRect().top + window.scrollY - navbarOffset;
@@ -562,8 +636,6 @@ export default function Portfolio() {
       behavior: "smooth",
     });
 
-    // Cuando termina aproximadamente el scroll suave,
-    // volvemos a dejar que el scroll-spy controle el estado activo.
     navigationTimerRef.current = setTimeout(() => {
       navigationTargetRef.current = null;
       setActiveSection(id);
@@ -639,6 +711,7 @@ export default function Portfolio() {
 
   return (
     <div ref={pageRef}>
+      {/* 1. Menú de navegación */}
       <Navbar
         lang={lang}
         theme={theme}
@@ -656,6 +729,7 @@ export default function Portfolio() {
       />
 
       <main>
+        {/* 2. Bienvenida / Hero con CV */}
         <section id="hero" className="hero">
           <div className="bg-orbs" aria-hidden="true">
             <span className="orb orb-1" />
@@ -717,6 +791,7 @@ export default function Portfolio() {
           </div>
         </section>
 
+        {/* 3. Acerca de mí */}
         <section id="sobre-mi" className="section">
           <div className="container">
             <h2 className="section-title">{t("title_about")}</h2>
@@ -772,62 +847,7 @@ export default function Portfolio() {
           </div>
         </section>
 
-        <section id="habilidades" className="section">
-          <div className="container">
-            <h2 className="section-title">{t("title_skills")}</h2>
-            <p className="about-text">{t("skills_desc")}</p>
-
-            <div className="carousel">
-              <div className="carousel-track">
-                {skills.map((skill, index) => (
-                  <article
-                    key={skill.name}
-                    className={`skill-card ${activeIndex === index ? "active" : ""}`}
-                    style={getCardStyle(index)}
-                    onMouseEnter={() => setActiveIndex(index)}
-                    onFocus={() => setActiveIndex(index)}
-                    onClick={() => setActiveIndex(index)}
-                    tabIndex={0}
-                  >
-                    <div className="skill-icon">
-                      <SkillIcon name={skill.name} />
-                    </div>
-                    <h3 className="skill-name">{skill.name}</h3>
-                    <p className="skill-level">{t(`skill_${index}`)}</p>
-                  </article>
-                ))}
-              </div>
-
-              <div className="carousel-controls">
-                <div className="carousel-nav">
-                  <button
-                    type="button"
-                    className="carousel-btn carousel-prev"
-                    onClick={previousSkill}
-                    aria-label="Anterior"
-                  >
-                    ‹
-                  </button>
-                  <button
-                    type="button"
-                    className="carousel-btn carousel-next"
-                    onClick={nextSkill}
-                    aria-label="Siguiente"
-                  >
-                    ›
-                  </button>
-                </div>
-
-                <div className="carousel-counter" aria-live="polite">
-                  <span>{activeIndex + 1}</span>
-                  <span>/</span>
-                  <span>{skills.length}</span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-
+        {/* 4. Mis proyectos */}
         <section id="proyectos" className="section section-alt">
           <div className="container">
             <h2 className="section-title">{t("title_projects")}</h2>
@@ -897,47 +917,116 @@ export default function Portfolio() {
           </div>
         </section>
 
+        {/* 5. Testimonios */}
         <section id="testimonios" className="section">
           <div className="container">
             <h2 className="section-title">{t("title_testi")}</h2>
+            <p className="about-text text-center max-w-2xl mx-auto mb-10">{t("testi_desc")}</p>
 
             <div className="testimonials-grid">
               <blockquote className="testimonial-card">
                 <div
                   className="testimonial-avatar"
-                  style={{ background: "#5b8def" }}
+                  style={{ background: "#4f46e5" }}
                 >
-                  NA
+                  CD
                 </div>
-                <p>{t("q1")}</p>
-                <footer>— Nombre Apellido, Cargo · Empresa</footer>
+                <p>“{t("t1_quote")}”</p>
+                <footer>— {t("t1_author")}, {t("t1_role")}</footer>
               </blockquote>
 
               <blockquote className="testimonial-card">
                 <div
                   className="testimonial-avatar"
-                  style={{ background: "#22d3ee" }}
+                  style={{ background: "#06b6d4" }}
                 >
-                  JC
+                  LB
                 </div>
-                <p>{t("q2")}</p>
-                <footer>— Nombre Apellido, Cargo · Empresa</footer>
+                <p>“{t("t2_quote")}”</p>
+                <footer>— {t("t2_author")}, {t("t2_role")}</footer>
               </blockquote>
 
               <blockquote className="testimonial-card">
                 <div
                   className="testimonial-avatar"
-                  style={{ background: "#a259ff" }}
+                  style={{ background: "#8b5cf6" }}
                 >
-                  LM
+                  AM
                 </div>
-                <p>{t("q3")}</p>
-                <footer>— Nombre Apellido, Cargo · Empresa</footer>
+                <p>“{t("t3_quote")}”</p>
+                <footer>— {t("t3_author")}, {t("t3_role")}</footer>
               </blockquote>
             </div>
           </div>
         </section>
 
+        {/* 6. Experiencia académica y laboral */}
+        <section id="experiencia" className="section section-alt">
+          <div className="container">
+            <h2 className="section-title">{t("title_exp")}</h2>
+            <p className="about-text text-center max-w-3xl mx-auto mb-12">{t("exp_desc")}</p>
+
+            <div className="experience-wrap">
+              {/* Columna Académica */}
+              <div className="experience-col">
+                <h3 className="experience-col-title">
+                  {t("exp_academic_title")}
+                </h3>
+                <div className="timeline">
+                  <article className="timeline-item">
+                    <span className="timeline-dot" aria-hidden="true" />
+                    <div className="timeline-card">
+                      <span className="timeline-date">{t("exp_acad_1_date")}</span>
+                      <h4 className="timeline-role">{t("exp_acad_1_role")}</h4>
+                      <p className="timeline-place">{t("exp_acad_1_place")}</p>
+                      <p className="timeline-desc">{t("exp_acad_1_desc")}</p>
+                    </div>
+                  </article>
+
+                  <article className="timeline-item">
+                    <span className="timeline-dot" aria-hidden="true" />
+                    <div className="timeline-card">
+                      <span className="timeline-date">{t("exp_acad_2_date")}</span>
+                      <h4 className="timeline-role">{t("exp_acad_2_role")}</h4>
+                      <p className="timeline-place">{t("exp_acad_2_place")}</p>
+                      <p className="timeline-desc">{t("exp_acad_2_desc")}</p>
+                    </div>
+                  </article>
+                </div>
+              </div>
+
+              {/* Columna Laboral & Proyectos */}
+              <div className="experience-col">
+                <h3 className="experience-col-title">
+                  {t("exp_work_title")}
+                </h3>
+                <div className="timeline">
+                  <article className="timeline-item">
+                    <span className="timeline-dot" aria-hidden="true" />
+                    <div className="timeline-card">
+                      <span className="timeline-date">{t("exp_work_1_date")}</span>
+                      <h4 className="timeline-role">{t("exp_work_1_role")}</h4>
+                      <p className="timeline-place">{t("exp_work_1_place")}</p>
+                      <p className="timeline-desc">{t("exp_work_1_desc")}</p>
+                    </div>
+                  </article>
+
+                  <article className="timeline-item">
+                    <span className="timeline-dot" aria-hidden="true" />
+                    <div className="timeline-card">
+                      <span className="timeline-date">{t("exp_work_2_date")}</span>
+                      <h4 className="timeline-role">{t("exp_work_2_role")}</h4>
+                      <p className="timeline-place">{t("exp_work_2_place")}</p>
+                      <p className="timeline-desc">{t("exp_work_2_desc")}</p>
+                    </div>
+                  </article>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* 7. Contactos */}
         <section id="contacto" className="section">
           <div className="container">
             <h2 className="section-title">{t("title_contact")}</h2>
@@ -1003,8 +1092,66 @@ export default function Portfolio() {
             </div>
           </div>
         </section>
+
+        {/* ⭐ Sección adicional (Habilidades, ubicada antes del pie de página) */}
+        <section id="habilidades" className="section section-alt">
+          <div className="container">
+            <h2 className="section-title">{t("title_skills")}</h2>
+            <p className="about-text">{t("skills_desc")}</p>
+
+            <div className="carousel">
+              <div className="carousel-track">
+                {skills.map((skill, index) => (
+                  <article
+                    key={skill.name}
+                    className={`skill-card ${activeIndex === index ? "active" : ""}`}
+                    style={getCardStyle(index)}
+                    onMouseEnter={() => setActiveIndex(index)}
+                    onFocus={() => setActiveIndex(index)}
+                    onClick={() => setActiveIndex(index)}
+                    tabIndex={0}
+                  >
+                    <div className="skill-icon">
+                      <SkillIcon name={skill.name} />
+                    </div>
+                    <h3 className="skill-name">{skill.name}</h3>
+                    <p className="skill-level">{t(`skill_${index}`)}</p>
+                  </article>
+                ))}
+              </div>
+
+              <div className="carousel-controls">
+                <div className="carousel-nav">
+                  <button
+                    type="button"
+                    className="carousel-btn carousel-prev"
+                    onClick={previousSkill}
+                    aria-label="Anterior"
+                  >
+                    ‹
+                  </button>
+                  <button
+                    type="button"
+                    className="carousel-btn carousel-next"
+                    onClick={nextSkill}
+                    aria-label="Siguiente"
+                  >
+                    ›
+                  </button>
+                </div>
+
+                <div className="carousel-counter" aria-live="polite">
+                  <span>{activeIndex + 1}</span>
+                  <span>/</span>
+                  <span>{skills.length}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
       </main>
 
+      {/* 8. Pie de página */}
       <footer className="footer">
         <div className="container">
           <div className="footer-made">
