@@ -107,7 +107,7 @@ footer {
 }
 
 main section {
-  scroll-margin-top: 6.5rem;
+  scroll-margin-top: 0;
 }
 
 .container {
@@ -712,7 +712,13 @@ main section {
 
 /* Secciones */
 .section {
-  padding: 5rem 0;
+  padding: 6.5rem 0 4.5rem;
+}
+
+@media (min-width: 768px) {
+  .section {
+    padding: 7rem 0 5rem;
+  }
 }
 
 .section-alt {
